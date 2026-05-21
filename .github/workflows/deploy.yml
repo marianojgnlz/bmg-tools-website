@@ -16,6 +16,10 @@ on:
         required: false
         default: "false"
         type: boolean
+      version:
+        description: "Version tag (optional)"
+        required: false
+        type: string
 
 jobs:
   deploy:
@@ -29,6 +33,7 @@ jobs:
         run: |
           echo "Environment: ${{ inputs.environment }}"
           echo "Dry run: ${{ inputs.dry_run }}"
+          echo "Version: ${{ inputs.version }}"
 
       - name: Simulate deploy
         run: |
