@@ -1,0 +1,55 @@
+name: Test Failures
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Failure scenario"
+        required: true
+        default: "step-failure"
+        type: choice
+        options:
+          - step-failure
+          - mid-run-failure
+          - all-pass
+
+jobs:
+  test:
+    name: Test scenario
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        run: |
+          echo "Running scenario: ${{ inputs.scenario }}"
+          echo "Preparing environment..."
+
+      - name: Step A
+        run: |
+          echo "Step A running..."
+          sleep 2
+          echo "Step A done."
+
+      - name: Step B (may fail)
+        run: |
+          echo "Step B running..."
+          if [ "${{ inputs.scenario }}" = "step-failure" ]; then
+            echo "Simulating failure in Step B"
+            exit 1
+          fi
+          echo "Step B done."
+
+      - name: Step C
+        run: |
+          echo "Step C running..."
+          if [ "${{ inputs.scenario }}" = "mid-run-failure" ]; then
+            echo "Simulating failure in Step C"
+            exit 1
+          fi
+          echo "Step C done."
+
+      - name: Teardown
+        if: always()
+        run: |
+          echo "Cleaning up..."
+          sleep 1
+          echo "Done."
