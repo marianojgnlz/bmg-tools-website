@@ -1,4 +1,4 @@
-name: Test Failures
+name: "[Auth Service] Test Failures"
 
 on:
   workflow_dispatch:

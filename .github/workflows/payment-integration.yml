@@ -1,0 +1,41 @@
+name: "[Payment Gateway] Integration Tests"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        run: |
+          echo "Setting up for env: ${{ inputs.environment || 'main branch push' }}"
+          sleep 2
+
+      - name: Run integration tests
+        run: |
+          echo "Running payment gateway integration tests..."
+          sleep 3
+          echo "All tests passed."
+
+      - name: Upload test results
+        run: |
+          echo "Uploading test results..."
+          sleep 1
+          echo "Done."

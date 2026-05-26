@@ -1,0 +1,49 @@
+name: "[Frontend] Build & Lint"
+
+on:
+  workflow_dispatch:
+    inputs:
+      node_version:
+        description: "Node.js version"
+        required: false
+        default: "20"
+        type: choice
+        options:
+          - "18"
+          - "20"
+          - "22"
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        run: |
+          echo "Setting up Node.js ${{ inputs.node_version || '20' }}..."
+          sleep 1
+
+      - name: Install dependencies
+        run: |
+          echo "Installing npm packages..."
+          sleep 2
+          echo "Packages installed."
+
+      - name: Lint
+        run: |
+          echo "Running ESLint..."
+          sleep 2
+          echo "No lint errors found."
+
+      - name: Build
+        run: |
+          echo "Building production bundle..."
+          sleep 4
+          echo "Bundle size: 1.2 MB"
+          echo "Build complete."

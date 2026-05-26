@@ -1,0 +1,52 @@
+name: "Database Migrations"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      rollback:
+        description: "Rollback last migration"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  migrate:
+    name: Run migrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Connect to database
+        run: |
+          echo "Connecting to ${{ inputs.environment }} database..."
+          sleep 1
+          echo "Connected."
+
+      - name: Check pending migrations
+        run: |
+          echo "Checking pending migrations..."
+          sleep 1
+          echo "2 pending migrations found."
+
+      - name: Apply migrations
+        if: ${{ inputs.rollback != 'true' }}
+        run: |
+          echo "Applying migrations to ${{ inputs.environment }}..."
+          sleep 3
+          echo "Migrations applied successfully."
+
+      - name: Rollback migration
+        if: ${{ inputs.rollback == 'true' }}
+        run: |
+          echo "Rolling back last migration on ${{ inputs.environment }}..."
+          sleep 2
+          echo "Rollback complete."

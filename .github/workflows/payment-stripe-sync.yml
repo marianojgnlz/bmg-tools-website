@@ -1,0 +1,36 @@
+name: "[Payment Gateway] Stripe Webhook Sync"
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run only"
+        required: false
+        default: "true"
+        type: boolean
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  sync:
+    name: Sync Stripe webhooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Stripe config
+        run: |
+          echo "Validating Stripe configuration..."
+          sleep 1
+          echo "Config valid."
+
+      - name: Sync webhooks
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "DRY RUN: would sync 12 webhook endpoints"
+          else
+            echo "Syncing webhook endpoints..."
+            sleep 4
+            echo "Sync complete."
+          fi

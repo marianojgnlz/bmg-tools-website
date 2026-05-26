@@ -1,0 +1,38 @@
+name: "Cleanup Scripts"
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "What to clean up"
+        required: true
+        default: "stale-branches"
+        type: choice
+        options:
+          - stale-branches
+          - old-artifacts
+          - both
+  schedule:
+    - cron: "0 2 * * 0"
+
+jobs:
+  cleanup:
+    name: Run cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Delete stale branches
+        if: ${{ inputs.target == 'stale-branches' || inputs.target == 'both' || github.event_name == 'schedule' }}
+        run: |
+          echo "Scanning for branches merged > 30 days ago..."
+          sleep 2
+          echo "Deleted 3 stale branches."
+
+      - name: Delete old artifacts
+        if: ${{ inputs.target == 'old-artifacts' || inputs.target == 'both' || github.event_name == 'schedule' }}
+        run: |
+          echo "Scanning for artifacts older than 90 days..."
+          sleep 2
+          echo "Freed 420 MB of artifact storage."
