@@ -1,0 +1,14 @@
+name: Test Docker Artifact
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v3
+      - run: printf 'FROM alpine:3\nRUN echo hello' > Dockerfile
+      - uses: docker/build-push-action@v6
+        with:
+          push: false
+          tags: test:latest
